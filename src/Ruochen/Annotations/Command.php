@@ -15,7 +15,10 @@ use Doctrine\Common\Annotations\Annotation\Target;
  * @Annotation
  * @Target({"METHOD"})
  */
-class Option
+class Command
 {
-
+    /**
+     * @var string
+     */
+    public $name;
 }

@@ -8,30 +8,36 @@
 <?php
 
 namespace Examples;
+use Ruochen\Annotations\Command;
+use Ruochen\Annotations\Desc;
+use Ruochen\Annotations\Opread;
+use Ruochen\Foundation\CommandTool;
+
 require_once __DIR__.'/../vendor/autoload.php';
 
 class SampleTool extends CommandTool {
 
     /**
-     * @Option
-     * @Opread
-     * @Desc query some data
+     * @Command
+     * @Opread(name="key",mode="required")
+     * @Desc(value="query some data")
      */
     public function query(){
         $this->logger->info("query.....");
     }
 
     /**
-     * @Option
-     * @Desc list all data
+     * @Command
+     * @Desc(value="list all data")
      */
     public function list(){
         $this->logger->info("list.....");
     }
 
+
     /**
-     * @Option dp
-     * @Desc dump data
+     * @Command(name="dp")
+     * @Desc(value="dump all data")
      */
     public function dump(){
         $this->logger->info("dump.....");
@@ -39,14 +45,24 @@ class SampleTool extends CommandTool {
 
 }
 
-$sampleTool = new SampleTool();
+$sampleTool = new SampleTool(__FILE__);
 
 $sampleTool->process();
 ```
 
 命令行提示
 ```bash
+C:\soft\php7\php.exe E:\Work\rc-cmd\examples\sample
+Usage: E:\Work\rc-cmd\examples\sample <command> [options] [operands]
 
+Options:
+  -v, --version  Show version information and quit
+  -h, --help     Show this help and quit
+
+Commands:
+  query  query some data
+  list   list all data
+  dp     dump all data
 ```
 ## 依赖
 
