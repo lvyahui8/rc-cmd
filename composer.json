@@ -1,0 +1,33 @@
+{
+    "name": "hongye/rc-cmd",
+    "authors": [
+        {
+            "name": "lvyahui8",
+            "email": "lvyahui8@126.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "nette/utils": "^2.4",
+        "jbzoo/utils": "^2.2",
+        "hassankhan/config": "^0.11.2",
+        "monolog/monolog": "^1.23",
+        "symfony/yaml": "^3.3",
+        "ulrichsg/getopt-php": "^3.0",
+        "doctrine/annotations": "^1.5"
+    },
+    "autoload": {
+        "files": [
+            "src/Ruochen/Foundation/helpers.php"
+        ],
+        "psr-4": {
+            "Ruochen\\": "src/Ruochen/"
+        }
+    },
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://packagist.phpcomposer.com"
+        }
+    }
+}

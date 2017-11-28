@@ -1,0 +1,41 @@
+#!/usr/bin/env php
+<?php
+
+namespace Examples;
+use Ruochen\Annotations\Option;
+use Ruochen\Foundation\CommandTool;
+
+require_once __DIR__.'/../vendor/autoload.php';
+
+class SampleTool extends CommandTool {
+
+    /**
+     * @Option
+     * @Opread(name="key",mode="required")
+     * @Desc(value="query some data")
+     */
+    public function query(){
+        $this->logger->info("query.....");
+    }
+
+    /**
+     * @Option
+     * @Desc(value="list all data")
+     */
+    public function list(){
+        $this->logger->info("list.....");
+    }
+
+    /**
+     * @Option(name="dp")
+     * @Desc(value="dump all data")
+     */
+    public function dump(){
+        $this->logger->info("list.....");
+    }
+
+}
+
+$sampleTool = new SampleTool(__FILE__);
+
+$sampleTool->process();
