@@ -36,6 +36,11 @@ abstract class CommandTool extends GetOpt
     protected $annoReader;
 
     /**
+     * @var \ReflectionMethod[]
+     */
+    protected $commandMethodMap = [];
+
+    /**
      * CommandTool constructor.
      * @param string $toolfile
      * @param array|string $options
@@ -87,7 +92,7 @@ abstract class CommandTool extends GetOpt
 
             if($commandAnno != null){
                 $commandName = $commandAnno->name ? $commandAnno->name : $method->getName();
-                $command = Command::create($commandName,[$this,$method]);
+                $command = Command::create($commandName,[$this,$method->getName()]);
 
                 $opreadAnno = $this->annoReader->getMethodAnnotation($method,\Ruochen\Annotations\Opread::class);
 
@@ -102,6 +107,7 @@ abstract class CommandTool extends GetOpt
                 if($descAnno){
                     $command->setDescription($descAnno->value);
                 }
+                $this->commandMethodMap[$method->getName()] = $method;
                 $this->addCommand($command);
             }
         }
@@ -115,10 +121,9 @@ abstract class CommandTool extends GetOpt
 
     public function process($arguments = null)
     {
-        $result = 0;
         try{
             try {
-                $result = parent::process($arguments);
+                parent::process($arguments);
             } catch (Missing $exception) {
                 if (!$this->getOption('help')) {
                     throw $exception;
@@ -140,7 +145,7 @@ abstract class CommandTool extends GetOpt
             echo $this->getHelpText();
             exit;
         }
-
-        return  call_user_func($command->getHandler(), $this);
+        $handler = $command->getHandler();
+        return  call_user_func($handler);
     }
 }

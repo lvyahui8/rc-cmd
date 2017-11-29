@@ -21,4 +21,17 @@ class Command
      * @var string
      */
     public $name;
+
+    /**
+     * Command constructor.
+     * @param array $values
+     */
+    public function __construct(array $values)
+    {
+        if(isset($values['value'])) $this->name = $values['value'];
+
+        if(isset($values['name'])) $this->name = $values['name'];
+    }
+
+
 }
