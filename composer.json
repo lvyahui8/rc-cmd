@@ -14,7 +14,8 @@
         "monolog/monolog": "^1.23",
         "symfony/yaml": "^3.3",
         "ulrichsg/getopt-php": "^3.0",
-        "doctrine/annotations": "^1.5"
+        "doctrine/annotations": "^1.5",
+        "league/climate": "^3.2"
     },
     "autoload": {
         "files": [

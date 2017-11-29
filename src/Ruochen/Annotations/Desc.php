@@ -24,4 +24,17 @@ class Desc
      */
     public $value;
 
+    /**
+     * Desc constructor.
+     * @param array $values
+     */
+    public function __construct(array $values)
+    {
+//        $this->value = $values['vaule'];
+        if(isset($values['value'])){
+            $this->value = $values['value'];
+        }
+    }
+
+
 }
