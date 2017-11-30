@@ -20,6 +20,7 @@ use GetOpt\Operand;
 use GetOpt\Option;
 use JBZoo\Utils\FS;
 use Monolog\Logger;
+use Ruochen\Logs\ToolLogger;
 
 abstract class CommandTool extends GetOpt
 {
@@ -62,7 +63,7 @@ abstract class CommandTool extends GetOpt
 
     private function initLogger()
     {
-        $this->logger = new Logger((FS::filename($this->toolfile)));
+        $this->logger = ToolLogger::getInstance(FS::filename($this->toolfile));
     }
 
     private function bindOptions()

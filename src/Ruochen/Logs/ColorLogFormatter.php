@@ -28,6 +28,7 @@ class ColorLogFormatter extends LineFormatter
         , $allowInlineLineBreaks = false, $ignoreEmptyContextAndExtra = false)
     {
         parent::__construct($format, $dateFormat, $allowInlineLineBreaks, $ignoreEmptyContextAndExtra);
+
         $this->colorMap = [
             Logger::DEBUG     => chr(27) . '[32mDEBUG' . chr(27) . '[0m',
             Logger::INFO      => chr(27) . '[34mINFO' . chr(27) . '[0m',
