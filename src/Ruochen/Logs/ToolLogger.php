@@ -9,7 +9,9 @@
 namespace Ruochen\Logs;
 
 
+use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\HandlerInterface;
+use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
 class ToolLogger extends Logger
@@ -24,5 +26,18 @@ class ToolLogger extends Logger
     public function __construct($name, array $handlers = array(), array $processors = array())
     {
         parent::__construct($name,$handlers,$processors);
+    }
+
+
+    public static function getInstance($name, array $handlers = array(), array $processors = array()){
+        $logger = new ToolLogger($name,$handlers,$processors);
+        $formatter = new ColorLogFormatter();
+        $fileHandler = new StreamHandler(storage_path().'/logs/'.$name.'.log',Logger::INFO);
+        $consoleHandler = new StreamHandler('php://stdout',Logger::DEBUG);
+        $fileHandler->setFormatter($formatter);
+        $consoleHandler->setFormatter($formatter);
+        $logger->pushHandler($fileHandler);
+        $logger->pushHandler($consoleHandler);
+        return $logger;
     }
 }
