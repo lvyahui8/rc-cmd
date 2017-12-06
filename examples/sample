@@ -5,17 +5,23 @@ namespace Examples;
 use League\CLImate\CLImate;
 use Ruochen\Annotations\Command;
 use Ruochen\Annotations\Desc;
-use Ruochen\Annotations\Opread;
+use Ruochen\Annotations\Operand;
+use Ruochen\Annotations\Option;
 use Ruochen\Foundation\CommandTool;
 use Ruochen\Helpers\ANSIHelper;
 
 require_once __DIR__.'/../vendor/autoload.php';
 
+/**
+ * Class SampleTool
+ * @package Examples
+ * @Option
+ */
 class SampleTool extends CommandTool {
 
     /**
      * @Command
-     * @Opread(name="key",mode="required")
+     * @Operand(name="key",mode="required")
      * @Desc("query some data")
      */
     public function query(){
@@ -25,6 +31,7 @@ class SampleTool extends CommandTool {
     /**
      * @Command(name="ll")
      * @Desc(value="list all data")
+     * @Option(short="f",long="filter",mode="requiredArg",desc="xxxxx")
      */
     public function list(){
         $cli = new CLImate();
@@ -54,6 +61,6 @@ class SampleTool extends CommandTool {
 
 }
 
-$sampleTool = new SampleTool(__FILE__);
+$sampleTool = SampleTool::getInstance();
 
 $sampleTool->process();

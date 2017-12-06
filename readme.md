@@ -76,7 +76,7 @@ Options:
 
 Commands:
   query  query some data
-  list   list all data
+  ll     list all data
   dp     dump all data
 ```
 

@@ -20,16 +20,21 @@ use GetOpt\Operand;
 use GetOpt\Option;
 use JBZoo\Utils\FS;
 use Monolog\Logger;
+use ReflectionClass;
+use Ruochen\Annotations\Desc;
 use Ruochen\Logs\ToolLogger;
 
 abstract class CommandTool extends GetOpt
 {
+    use Singleton;
     /**
      * @var Logger
      */
     protected $logger;
 
     protected $toolfile;
+
+    protected $classRf;
 
     /**
      * @var AnnotationReader
@@ -41,16 +46,21 @@ abstract class CommandTool extends GetOpt
      */
     protected $commandMethodMap = [];
 
+
+    protected $classname;
+
     /**
      * CommandTool constructor.
      * @param string $toolfile
      * @param array|string $options
      * @param array $settings
      */
-    public function __construct($toolfile, $options=null, $settings = [])
+    public function __construct($toolfile = null, $options=null, $settings = [])
     {
         parent::__construct($options,$settings);
-        $this->toolfile = $toolfile;
+        $this->classname = get_class($this);
+        $this->classRf = new ReflectionClass($this->classname);
+        $this->toolfile = $toolfile == null ? FS::filename($this->classRf->getFileName()) : $toolfile;
         $this->init();
     }
 
@@ -87,26 +97,37 @@ abstract class CommandTool extends GetOpt
             'multiple'  =>  Operand::MULTIPLE,
             'optional'  =>  Operand::OPTIONAL,
         ];
+        $optionMap = [
+            'noArg'       => GetOpt::NO_ARGUMENT,
+            'requiredArg' => GetOpt::REQUIRED_ARGUMENT,
+            'optionalArg' => GetOpt::OPTIONAL_ARGUMENT,
+            'multipleArg' => GetOpt::MULTIPLE_ARGUMENT,
+        ];
         foreach($methods as $method){
             $commandAnno = $this->annoReader
-                ->getMethodAnnotation($method,'\Ruochen\Annotations\Command');
+                ->getMethodAnnotation($method,\Ruochen\Annotations\Command::class);
 
             if($commandAnno != null){
-                $commandName = $commandAnno->name ? $commandAnno->name : $method->getName();
+                $commandName = isset($commandAnno->name) ? $commandAnno->name : $method->getName();
                 $command = Command::create($commandName,[$this,$method->getName()]);
 
-                $opreadAnno = $this->annoReader->getMethodAnnotation($method,\Ruochen\Annotations\Opread::class);
-
-                if($opreadAnno){
+                $opreadAnno = $this->annoReader->getMethodAnnotation($method,\Ruochen\Annotations\Operand::class);
+                if($opreadAnno && isset($opreadAnno->name)){
                     $opread = Operand::create($opreadAnno->name
                         ,isset($opreadMap[$opreadAnno->mode]) ? $opreadMap[$opreadAnno->mode] : Operand::REQUIRED);
 
                     $command->addOperand($opread);
                 }
 
-                $descAnno = $this->annoReader->getMethodAnnotation($method,\Ruochen\Annotations\Desc::class);
+                $descAnno = $this->annoReader->getMethodAnnotation($method,Desc::class);
                 if($descAnno){
                     $command->setDescription($descAnno->value);
+                }
+
+                $optionAnno = $this->annoReader->getMethodAnnotation($method,\Ruochen\Annotations\Option::class);
+                if($optionAnno != null) {
+                    $command->addOption(Option::create($optionAnno->short,$optionAnno->long,
+                        isset($optionAnno->mode) ? $optionMap[$optionAnno->mode] : GetOpt::NO_ARGUMENT)->setDescription($optionAnno->desc));
                 }
                 $this->commandMethodMap[$method->getName()] = $method;
                 $this->addCommand($command);
