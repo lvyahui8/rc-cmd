@@ -11,6 +11,7 @@ namespace Ruochen\Foundation;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Dotenv\Dotenv;
 use Exception;
 use GetOpt\ArgumentException;
 use GetOpt\ArgumentException\Missing;
@@ -66,6 +67,7 @@ abstract class CommandTool extends GetOpt
 
     private function init()
     {
+        $this->loadEnv();
         $this->initLogger();
         $this->initAnnoReader();
         $this->bindOptions();
@@ -169,5 +171,13 @@ abstract class CommandTool extends GetOpt
         }
         $handler = $command->getHandler();
         return  call_user_func($handler);
+    }
+
+    private function loadEnv()
+    {
+//        $dotenv = new D(__DIR__);
+//        $dotenv->load();
+        $dotenv = new Dotenv(base_path());
+        $dotenv->load();
     }
 }
