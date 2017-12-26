@@ -103,6 +103,14 @@ abstract class CommandTool extends GetOpt
             'optionalArg' => GetOpt::OPTIONAL_ARGUMENT,
             'multipleArg' => GetOpt::MULTIPLE_ARGUMENT,
         ];
+        $classOptionAnno = $this->annoReader->getClassAnnotation($ref,\Ruochen\Annotations\Option::class);
+
+        if($classOptionAnno != null){
+            $this->addOption(Option::create($classOptionAnno->short,
+                $classOptionAnno->long,isset($classOptionAnno->mode) ? $optionMap[$classOptionAnno->mode] : GetOpt::NO_ARGUMENT)
+                ->setDescription($classOptionAnno->desc));
+        }
+
         foreach($methods as $method){
             $commandAnno = $this->annoReader
                 ->getMethodAnnotation($method,\Ruochen\Annotations\Command::class);
@@ -119,11 +127,14 @@ abstract class CommandTool extends GetOpt
                     $command->addOperand($opread);
                 }
 
-                $descAnno = $this->annoReader->getMethodAnnotation($method,Desc::class);
-                if($descAnno){
-                    $command->setDescription($descAnno->value);
+                if($commandAnno->desc != null){
+                    $command->setDescription($commandAnno->desc);
+                } else {
+                    $descAnno = $this->annoReader->getMethodAnnotation($method,Desc::class);
+                    if($descAnno){
+                        $command->setDescription($descAnno->value);
+                    }
                 }
-
                 $optionAnno = $this->annoReader->getMethodAnnotation($method,\Ruochen\Annotations\Option::class);
                 if($optionAnno != null) {
                     $command->addOption(Option::create($optionAnno->short,$optionAnno->long,

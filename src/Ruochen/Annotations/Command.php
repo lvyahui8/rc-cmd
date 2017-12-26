@@ -23,6 +23,11 @@ class Command
     public $name;
 
     /**
+     * @var string
+     */
+    public $desc;
+
+    /**
      * Command constructor.
      * @param array $values
      */
@@ -31,6 +36,7 @@ class Command
         if(isset($values['value'])) $this->name = $values['value'];
 
         if(isset($values['name'])) $this->name = $values['name'];
+        if(isset($values['desc'])) $this->desc = $values['desc'];
     }
 
 
