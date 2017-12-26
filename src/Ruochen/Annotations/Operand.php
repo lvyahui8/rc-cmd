@@ -18,7 +18,7 @@ use Doctrine\Common\Annotations\Annotation\Required;
  * @Annotation
  * @Target({"METHOD"})
  */
-class Opread
+class Operand
 {
     /**
      * @var string
