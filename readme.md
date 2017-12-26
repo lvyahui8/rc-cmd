@@ -1,5 +1,11 @@
 # PHP 命令行工具框架
 
+## 使用方法
+
+```
+composer require hongye/rc-cmd
+```
+
 ## 示例
 
 命令工具文件 sample
