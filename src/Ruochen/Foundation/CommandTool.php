@@ -148,7 +148,8 @@ abstract class CommandTool extends GetOpt
 
     private function initAnnoReader()
     {
-        AnnotationRegistry::registerAutoloadNamespace('Ruochen\Annotations',base_path().'/src');
+        $docPath = realpath(__DIR__.'/../../../src');
+        AnnotationRegistry::registerAutoloadNamespace('Ruochen\Annotations',$docPath);
         $this->annoReader = new AnnotationReader();
     }
 
