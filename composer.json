@@ -1,5 +1,6 @@
 {
     "name": "hongye/rc-cmd",
+    "description": "A short description of what your package does",
     "authors": [
         {
             "name": "lvyahui8",
@@ -8,6 +9,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
+        "php": "^7.0",
         "nette/utils": "^2.4",
         "jbzoo/utils": "^2.2",
         "hassankhan/config": "^0.11.2",
@@ -15,7 +17,8 @@
         "symfony/yaml": "^3.3",
         "ulrichsg/getopt-php": "^3.0",
         "doctrine/annotations": "^1.5",
-        "league/climate": "^3.2"
+        "league/climate": "^3.2",
+        "vlucas/phpdotenv": "^2.4"
     },
     "autoload": {
         "files": [

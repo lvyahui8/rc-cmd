@@ -18,7 +18,7 @@ use Doctrine\Common\Annotations\Annotation\Required;
  * @Annotation
  * @Target({"METHOD"})
  */
-class Opread
+class Operand
 {
     /**
      * @var string
@@ -30,4 +30,8 @@ class Opread
      * @Enum({"required","multiple","optional"})
      */
     public $mode;
+    /**
+     * @var string
+     */
+    public $desc;
 }
