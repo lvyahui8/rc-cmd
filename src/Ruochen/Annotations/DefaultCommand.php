@@ -6,7 +6,7 @@
  * Time: 15:02
  */
 
-namespace Zhiyun\Annotations;
+namespace Ruochen\Annotations;
 
 /**
  * Class DefaultCommand
