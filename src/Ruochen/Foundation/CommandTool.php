@@ -24,7 +24,7 @@ use Monolog\Logger;
 use ReflectionClass;
 use Ruochen\Annotations\Desc;
 use Ruochen\Logs\ToolLogger;
-use Zhiyun\Annotations\DefaultCommand;
+use Ruochen\Annotations\DefaultCommand;
 
 abstract class CommandTool extends GetOpt
 {
