@@ -24,6 +24,7 @@ use Monolog\Logger;
 use ReflectionClass;
 use Ruochen\Annotations\Desc;
 use Ruochen\Logs\ToolLogger;
+use Zhiyun\Annotations\DefaultCommand;
 
 abstract class CommandTool extends GetOpt
 {
@@ -47,6 +48,7 @@ abstract class CommandTool extends GetOpt
      */
     protected $commandMethodMap = [];
 
+    private $defaultCommand;
 
     protected $classname;
 
@@ -144,6 +146,9 @@ abstract class CommandTool extends GetOpt
                 }
                 $this->commandMethodMap[$method->getName()] = $method;
                 $this->addCommand($command);
+                if($this->annoReader->getMethodAnnotation($method,DefaultCommand::class)){
+                    $this->setDefaultCommand($commandName);
+                }
             }
         }
     }
@@ -176,9 +181,19 @@ abstract class CommandTool extends GetOpt
             exit;
         }
         $command = $this->getCommand();
-        if (!$command || $this->getOption('help')) {
-            echo $this->getHelpText();
-            exit;
+        if (!$command) {
+            $exec = false;
+            if($this->getDefaultCommand() != null){
+                $command = $this->getCommand($this->getDefaultCommand());
+                if($command){
+                    $exec = true;
+                }
+            }
+            if(! $exec || $this->getOption('help')){
+                // 这个方法可能会卡死
+                echo $this->getHelpText();
+                exit;
+            }
         }
         $handler = $command->getHandler();
         return  call_user_func($handler);
@@ -190,5 +205,21 @@ abstract class CommandTool extends GetOpt
 //        $dotenv->load();
         $dotenv = new Dotenv(base_path());
         $dotenv->load();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDefaultCommand()
+    {
+        return $this->defaultCommand;
+    }
+
+    /**
+     * @param mixed $defaultCommand
+     */
+    public function setDefaultCommand($defaultCommand)
+    {
+        $this->defaultCommand = $defaultCommand;
     }
 }
