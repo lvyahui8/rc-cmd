@@ -3,7 +3,11 @@
 
 require_once __DIR__.'/../vendor/autoload.php';
 
+use Ruochen\Foundation\CommandContext;
 use Ruochen\Tools\SampleTool;
+
+
+CommandContext::getInstance()->setBasePath(__DIR__.'/../');
 
 $sampleTool = SampleTool::getInstance();
 

@@ -1,8 +1,10 @@
 <?php
 
+use Ruochen\Foundation\CommandContext;
+
 if( ! function_exists('base_path')){
     function base_path(){
-        return realpath(__DIR__.'/../../../');
+        return CommandContext::getInstance()->getBasePath();
     }
 }
 

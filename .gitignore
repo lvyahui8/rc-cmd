@@ -1,2 +1,7 @@
 vendor
 .idea
+*.log
+*storage/logs/*
+!storage/logs/.gitignore
+*storage/cache/*
+!storage/cache/.gitignore
