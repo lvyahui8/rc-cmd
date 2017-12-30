@@ -204,7 +204,7 @@ abstract class CommandTool extends GetOpt
     {
 //        $dotenv = new D(__DIR__);
 //        $dotenv->load();
-        $dotenv = new Dotenv(base_path());
+        $dotenv = new Dotenv(runtime_context_path());
         $dotenv->load();
     }
 
