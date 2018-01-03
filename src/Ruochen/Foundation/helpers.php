@@ -2,21 +2,21 @@
 
 use Ruochen\Foundation\CommandContext;
 
-if( ! function_exists('base_path')){
-    function base_path(){
+if( ! function_exists('runtime_context_path')){
+    function runtime_context_path(){
         return CommandContext::getInstance()->getBasePath();
     }
 }
 
-if( ! function_exists('storage_path')){
-    function storage_path(){
-        return base_path().'/storage';
+if( ! function_exists('runtime_storage_path')){
+    function runtime_storage_path(){
+        return runtime_context_path().'/storage';
     }
 }
 
-if( ! function_exists('config_path')){
-    function config_path(){
-        return base_path().'/config';
+if( ! function_exists('runtime_config_path')){
+    function runtime_config_path(){
+        return runtime_context_path().'/config';
     }
 }
 
@@ -35,8 +35,8 @@ if( ! function_exists('unparse_url')){
     }
 }
 
-if( ! function_exists('startsWith')) {
-    function startsWith($haystack, $needles)
+if( ! function_exists('starts_with')) {
+    function starts_with($haystack, $needles)
     {
         foreach ((array) $needles as $needle) {
             if ($needle !== '' && substr($haystack, 0, strlen($needle)) === (string) $needle) {
@@ -48,8 +48,8 @@ if( ! function_exists('startsWith')) {
     }
 }
 
-if( ! function_exists('endsWith')) {
-    function endsWith($haystack, $needles)
+if( ! function_exists('ends_with')) {
+    function ends_with($haystack, $needles)
     {
         foreach ((array) $needles as $needle) {
             if (substr($haystack, -strlen($needle)) === (string) $needle) {
@@ -85,7 +85,7 @@ if( ! function_exists('env')) {
                 return NULL;
         }
 
-        if (strlen($value) > 1 && startsWith($value, '"') && endsWith($value, '"')) {
+        if (strlen($value) > 1 && starts_with($value, '"') && ends_with($value, '"')) {
             return substr($value, 1, -1);
         }
 
