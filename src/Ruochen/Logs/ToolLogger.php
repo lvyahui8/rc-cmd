@@ -32,7 +32,7 @@ class ToolLogger extends Logger
     public static function getInstance($name, array $handlers = array(), array $processors = array()){
         $logger = new ToolLogger($name,$handlers,$processors);
         $formatter = new ColorLogFormatter("[%datetime%]  %level_name%: %message%\n");
-        $fileHandler = new StreamHandler(storage_path().'/logs/'.$name.'.log',Logger::INFO);
+        $fileHandler = new StreamHandler(runtime_storage_path().'/logs/'.$name.'.log',Logger::INFO);
         $consoleHandler = new StreamHandler('php://stdout',Logger::DEBUG);
         $fileHandler->setFormatter($formatter);
         $consoleHandler->setFormatter($formatter);
