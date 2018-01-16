@@ -8,8 +8,6 @@
 
 namespace Ruochen\Logs;
 
-
-use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\HandlerInterface;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -17,6 +15,7 @@ use Monolog\Logger;
 class ToolLogger extends Logger
 {
 
+    private $logfile;
 
     /**
      * @param string             $name       The logging channel
@@ -29,10 +28,17 @@ class ToolLogger extends Logger
     }
 
 
-    public static function getInstance($name, array $handlers = array(), array $processors = array()){
+    /**
+     * @param $name
+     * @param array $handlers
+     * @param array $processors
+     * @return ToolLogger
+     */
+    public static function newInstance($name, array $handlers = array(), array $processors = array()){
         $logger = new ToolLogger($name,$handlers,$processors);
         $formatter = new ColorLogFormatter("[%datetime%]  %level_name%: %message%\n");
-        $fileHandler = new StreamHandler(runtime_storage_path().'/logs/'.$name.'.log',Logger::INFO);
+        $logger->logfile = runtime_storage_path().'/logs/'.$name.'.log';
+        $fileHandler = new StreamHandler($logger->logfile,Logger::INFO);
         $consoleHandler = new StreamHandler('php://stdout',Logger::DEBUG);
         $fileHandler->setFormatter($formatter);
         $consoleHandler->setFormatter($formatter);
@@ -40,4 +46,13 @@ class ToolLogger extends Logger
         $logger->pushHandler($consoleHandler);
         return $logger;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getLogfile()
+    {
+        return $this->logfile;
+    }
+
 }

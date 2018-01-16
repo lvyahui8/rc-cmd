@@ -77,7 +77,7 @@ abstract class CommandTool extends GetOpt
 
     private function initLogger()
     {
-        $this->logger = ToolLogger::getInstance(FS::filename($this->toolfile));
+        $this->logger = ToolLogger::newInstance(FS::filename($this->toolfile));
     }
 
     private function bindOptions()
