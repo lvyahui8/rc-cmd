@@ -30,4 +30,8 @@ class Operand
      * @Enum({"required","multiple","optional"})
      */
     public $mode;
+    /**
+     * @var string
+     */
+    public $desc;
 }

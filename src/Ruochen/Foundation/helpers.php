@@ -1,20 +1,22 @@
 <?php
 
-if( ! function_exists('base_path')){
-    function base_path(){
-        return realpath(__DIR__.'/../../../');
+use Ruochen\Foundation\CommandContext;
+
+if( ! function_exists('runtime_context_path')){
+    function runtime_context_path(){
+        return CommandContext::getInstance()->getBasePath();
     }
 }
 
-if( ! function_exists('storage_path')){
-    function storage_path(){
-        return base_path().'/storage';
+if( ! function_exists('runtime_storage_path')){
+    function runtime_storage_path(){
+        return runtime_context_path().'/storage';
     }
 }
 
-if( ! function_exists('config_path')){
-    function config_path(){
-        return base_path().'/config';
+if( ! function_exists('runtime_config_path')){
+    function runtime_config_path(){
+        return runtime_context_path().'/config';
     }
 }
 
@@ -33,3 +35,60 @@ if( ! function_exists('unparse_url')){
     }
 }
 
+if( ! function_exists('starts_with')) {
+    function starts_with($haystack, $needles)
+    {
+        foreach ((array) $needles as $needle) {
+            if ($needle !== '' && substr($haystack, 0, strlen($needle)) === (string) $needle) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
+
+if( ! function_exists('ends_with')) {
+    function ends_with($haystack, $needles)
+    {
+        foreach ((array) $needles as $needle) {
+            if (substr($haystack, -strlen($needle)) === (string) $needle) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
+
+if( ! function_exists('env')) {
+    function env($key, $default = null)
+    {
+        $value = getenv($key);
+
+        if ($value === false) {
+            return $default;
+        }
+
+        switch (strtolower($value)) {
+            case 'true':
+            case '(true)':
+                return true;
+            case 'false':
+            case '(false)':
+                return false;
+            case 'empty':
+            case '(empty)':
+                return '';
+            case 'null':
+            case '(null)':
+                return NULL;
+        }
+
+        if (strlen($value) > 1 && starts_with($value, '"') && ends_with($value, '"')) {
+            return substr($value, 1, -1);
+        }
+
+        return $value;
+    }
+}

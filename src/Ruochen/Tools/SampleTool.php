@@ -63,4 +63,11 @@ class SampleTool extends CommandTool {
         $this->logger->info("dump.....");
     }
 
+    /**
+     * @Command
+     */
+    public function env(){
+        $val = env("sample_env");
+        var_dump($val);
+    }
 }
