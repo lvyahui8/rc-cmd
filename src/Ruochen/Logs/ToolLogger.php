@@ -15,6 +15,9 @@ use Monolog\Logger;
 class ToolLogger extends Logger
 {
 
+    private static $instance;
+
+
     private $logfile;
 
     /**
@@ -50,9 +53,18 @@ class ToolLogger extends Logger
     /**
      * @return mixed
      */
+    public static function getInstance()
+    {
+        return self::$instance;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getLogfile()
     {
         return $this->logfile;
     }
+
 
 }
