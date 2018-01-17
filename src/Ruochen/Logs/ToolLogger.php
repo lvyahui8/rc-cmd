@@ -47,7 +47,7 @@ class ToolLogger extends Logger
         $consoleHandler->setFormatter($formatter);
         $logger->pushHandler($fileHandler);
         $logger->pushHandler($consoleHandler);
-        return $logger;
+        return self::$instance = $logger;
     }
 
     /**
