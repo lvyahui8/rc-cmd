@@ -51,7 +51,7 @@ class ToolLogger extends Logger
     }
 
     /**
-     * @return mixed
+     * @return ToolLogger
      */
     public static function getInstance()
     {
