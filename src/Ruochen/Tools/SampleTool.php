@@ -70,4 +70,21 @@ class SampleTool extends CommandTool {
         $val = env("sample_env");
         var_dump($val);
     }
+
+
+    /**
+     * @Command(name="set")
+     * @Operand(name="key",mode="required")
+     * @Operand(name="val",mode="required")
+     * @Desc(value="To modify a variable's value, the default permanent")
+     */
+    public function setEnv(){
+        $key = $this->getOperand('key');
+        $value = $this->getOperand('val');
+        if(! $value){
+            $this->logger->warn("Value is empty");
+        }
+
+        $this->logger->info("$key => $value");
+    }
 }

@@ -123,13 +123,31 @@ abstract class CommandTool extends GetOpt
                 $commandName = isset($commandAnno->name) ? $commandAnno->name : $method->getName();
                 $command = Command::create($commandName,[$this,$method->getName()]);
 
-                $opreadAnno = $this->annoReader->getMethodAnnotation($method,\Ruochen\Annotations\Operand::class);
-                if($opreadAnno && isset($opreadAnno->name)){
-                    $opread = Operand::create($opreadAnno->name
-                        ,isset($opreadMap[$opreadAnno->mode]) ? $opreadMap[$opreadAnno->mode] : Operand::REQUIRED);
-
-                    $command->addOperand($opread);
+                $annos = $this->annoReader->getMethodAnnotations($method);
+                $opreadAnnos = [];
+                $optionAnnos = [];
+                foreach($annos as $anno){
+                    $classname = get_class($anno);
+                    //if($anno instanceof \Ruochen\Annotations\Operand::class){
+                    if($classname == 'Ruochen\Annotations\Operand'){
+                        $opreadAnnos [] = $anno;
+                    }
+//                    else if($anno instanceof \Ruochen\Annotations\Option::class ){
+                    else if($classname  == 'Ruochen\Annotations\Option' ){
+                        $optionAnnos [] = $anno;
+                    }
                 }
+
+
+                foreach($opreadAnnos as $opreadAnno){
+                    if($opreadAnno && isset($opreadAnno->name)){
+                        $opread = Operand::create($opreadAnno->name
+                            ,isset($opreadMap[$opreadAnno->mode]) ? $opreadMap[$opreadAnno->mode] : Operand::REQUIRED);
+
+                        $command->addOperand($opread);
+                    }
+                }
+
 
                 if($commandAnno->desc != null){
                     $command->setDescription($commandAnno->desc);
@@ -139,11 +157,14 @@ abstract class CommandTool extends GetOpt
                         $command->setDescription($descAnno->value);
                     }
                 }
-                $optionAnno = $this->annoReader->getMethodAnnotation($method,\Ruochen\Annotations\Option::class);
-                if($optionAnno != null) {
-                    $command->addOption(Option::create($optionAnno->short,$optionAnno->long,
-                        isset($optionAnno->mode) ? $optionMap[$optionAnno->mode] : GetOpt::NO_ARGUMENT)->setDescription($optionAnno->desc));
+                foreach($optionAnnos as $optionAnno){
+                    if($optionAnno != null) {
+                        $command->addOption(Option::create($optionAnno->short,$optionAnno->long,
+                            isset($optionAnno->mode) ? $optionMap[$optionAnno->mode] : GetOpt::NO_ARGUMENT)->setDescription($optionAnno->desc));
+                    }
                 }
+
+
                 $this->commandMethodMap[$method->getName()] = $method;
                 $this->addCommand($command);
                 if($this->annoReader->getMethodAnnotation($method,DefaultCommand::class)){
@@ -181,6 +202,13 @@ abstract class CommandTool extends GetOpt
                 ,defined('VERSION') ? VERSION : '1.0.0' );
             exit;
         }
+
+        if ($this->getOption('help')){
+            // 这个方法可能会卡死
+            echo $this->getHelpText();
+            exit;
+        }
+
         $command = $this->getCommand();
         if (!$command) {
             $exec = false;
