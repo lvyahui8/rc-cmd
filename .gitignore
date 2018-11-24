@@ -5,3 +5,4 @@ vendor
 !storage/logs/.gitignore
 *storage/cache/*
 !storage/cache/.gitignore
+examples/storage/

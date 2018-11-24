@@ -38,4 +38,10 @@ class Option
      * @var string
      */
     public $desc;
+
+
+    /**
+     * @var string|array
+     */
+    public $default;
 }
